@@ -1,0 +1,183 @@
+{
+  "title": "Immoview MIS — Overview",
+  "description": "Request health, IAM events, and business throughput for the Immoview platform.",
+  "layout_type": "ordered",
+  "tags": ["service:django-core", "env:production"],
+  "widgets": [
+    {
+      "definition": {
+        "type": "group",
+        "layout_type": "ordered",
+        "title": "Request Health",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Request throughput",
+              "requests": [{
+                "q": "sum:trace.django.request.hits{service:django-core}.as_rate()",
+                "display_type": "bars",
+                "style": { "palette": "dog_classic" }
+              }],
+              "yaxis": { "include_zero": true, "label": "req/s" }
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Error rate (5xx)",
+              "requests": [{
+                "q": "sum:trace.django.request.errors{service:django-core,http.status_code:5*}.as_rate()",
+                "display_type": "bars",
+                "style": { "palette": "warm" }
+              }],
+              "markers": [{ "value": "y > 0.05", "display_type": "error dashed", "label": ">5%" }]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "P95 latency",
+              "requests": [{
+                "q": "p95:trace.django.request.duration{service:django-core}",
+                "display_type": "line",
+                "style": { "palette": "cool", "line_type": "solid" }
+              }],
+              "yaxis": { "label": "ms" },
+              "markers": [{ "value": "y = 500", "display_type": "warning dashed", "label": "500ms SLO" }]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "group",
+        "layout_type": "ordered",
+        "title": "IAM & Auth",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "JWT tokens issued / min",
+              "requests": [{
+                "q": "sum:immoview.jwt.issued{*} by {role}.as_rate()",
+                "display_type": "bars",
+                "style": { "palette": "purple" }
+              }]
+            }
+          },
+          {
+            "definition": {
+              "type": "toplist",
+              "title": "403 Forbidden by endpoint (last 1h)",
+              "requests": [{
+                "q": "sum:trace.django.request.errors{service:django-core,http.status_code:403} by {resource_name}.rollup(sum, 3600)"
+              }]
+            }
+          },
+          {
+            "definition": {
+              "type": "query_value",
+              "title": "Failed logins (last 15m)",
+              "requests": [{
+                "q": "sum:immoview.auth.login_failed{*}.rollup(sum, 900)",
+                "aggregator": "sum"
+              }],
+              "precision": 0,
+              "conditional_formats": [
+                { "comparator": ">", "value": 20, "palette": "white_on_red" },
+                { "comparator": ">", "value": 5,  "palette": "white_on_yellow" },
+                { "comparator": ">=", "value": 0, "palette": "white_on_green" }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "group",
+        "layout_type": "ordered",
+        "title": "Business Throughput",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Leads created / min by source",
+              "requests": [{
+                "q": "sum:immoview.lead.created{*} by {source}.as_rate()",
+                "display_type": "bars",
+                "style": { "palette": "green" }
+              }]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Listings published / hour",
+              "requests": [{
+                "q": "sum:immoview.listing.published{*}.rollup(sum, 3600)",
+                "display_type": "bars",
+                "style": { "palette": "blue" }
+              }]
+            }
+          },
+          {
+            "definition": {
+              "type": "query_value",
+              "title": "Leads today",
+              "requests": [{
+                "q": "sum:immoview.lead.created{*}.rollup(sum, 86400)",
+                "aggregator": "sum"
+              }],
+              "precision": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "group",
+        "layout_type": "ordered",
+        "title": "Lambda & AWS",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Lambda error rate by function",
+              "requests": [{
+                "q": "sum:aws.lambda.errors{service:serverless-aws} by {functionname}.as_rate()",
+                "display_type": "bars",
+                "style": { "palette": "warm" }
+              }]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Lambda duration P95 (ms)",
+              "requests": [{
+                "q": "p95:aws.lambda.duration{service:serverless-aws} by {functionname}",
+                "display_type": "line"
+              }]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "SQS lead-scoring queue depth",
+              "requests": [{
+                "q": "avg:aws.sqs.approximate_number_of_messages_visible{queuename:lead-scoring}",
+                "display_type": "area",
+                "style": { "palette": "orange" }
+              }],
+              "markers": [{ "value": "y = 100", "display_type": "error dashed", "label": "backlog alert" }]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+[
+  {
+    "name": "[Immoview] High error rate (5xx) on django-core",
+    "type": "metric alert",
+    "query": "sum(last_5m):sum:trace.django.request.errors{service:django-core,http.status_code:5*}.as_rate() > 0.1",
+    "message": "5xx error rate exceeded 10% over 5 minutes.\n\nInvestigate: @on-call-immoview\nRunbook: https://wiki.immoview.ch/runbooks/high-error-rate\n\n{{#is_alert}}P1 — page on-call{{/is_alert}}",
+    "tags": ["service:django-core", "severity:p1"],
+    "options": {
+      "thresholds": { "critical": 0.1, "warning": 0.05 },
+      "notify_no_data": false,
+      "evaluation_delay": 60
+    }
+  },
+  {
+    "name": "[Immoview] P95 latency > 800ms on django-core",
+    "type": "metric alert",
+    "query": "avg(last_10m):p95:trace.django.request.duration{service:django-core} > 800",
+    "message": "P95 request latency exceeded 800ms. Possible DB or cache degradation.\n\n@on-call-immoview",
+    "tags": ["service:django-core", "severity:p2"],
+    "options": {
+      "thresholds": { "critical": 800, "warning": 500 },
+      "notify_no_data": false
+    }
+  },
+  {
+    "name": "[Immoview] Credential stuffing — spike in failed logins",
+    "type": "metric alert",
+    "query": "sum(last_15m):sum:immoview.auth.login_failed{*} > 50",
+    "message": "More than 50 failed login attempts in 15 minutes. Possible credential stuffing attack.\n\nCheck: Cloudflare dashboard + `audit_log` table\n@security-immoview",
+    "tags": ["service:django-core", "severity:p1", "team:security"],
+    "options": {
+      "thresholds": { "critical": 50, "warning": 20 },
+      "notify_no_data": false
+    }
+  },
+  {
+    "name": "[Immoview] lead-scoring Lambda errors",
+    "type": "metric alert",
+    "query": "sum(last_5m):sum:aws.lambda.errors{functionname:lead-scoring}.as_count() > 5",
+    "message": "lead-scoring Lambda has >5 errors in 5 minutes. Leads may be missing scores.\n\nCheck: CloudWatch Logs > lead-scoring\n@on-call-immoview",
+    "tags": ["service:serverless-aws", "function:lead-scoring", "severity:p2"],
+    "options": {
+      "thresholds": { "critical": 5, "warning": 2 },
+      "notify_no_data": false
+    }
+  },
+  {
+    "name": "[Immoview] SQS lead-scoring queue backlog",
+    "type": "metric alert",
+    "query": "avg(last_10m):avg:aws.sqs.approximate_number_of_messages_visible{queuename:lead-scoring} > 500",
+    "message": "SQS lead-scoring queue has >500 unprocessed messages. Lambda may be throttled or failing.\n\n@on-call-immoview",
+    "tags": ["service:serverless-aws", "severity:p2"],
+    "options": {
+      "thresholds": { "critical": 500, "warning": 100 },
+      "notify_no_data": false
+    }
+  },
+  {
+    "name": "[Immoview] django-core health check failing",
+    "type": "service check",
+    "query": "\"http.can_connect\".over(\"url:http://django-core/health/ready/\").last(3).count_by_status()",
+    "message": "Django readiness probe has failed 3 consecutive times. DB or Redis may be down.\n\n@on-call-immoview",
+    "tags": ["service:django-core", "severity:p1"],
+    "options": {
+      "thresholds": { "critical": 3, "warning": 1, "ok": 1 }
+    }
+  }
+]

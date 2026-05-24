@@ -1,0 +1,37 @@
+{% extends "base/base.html" %}
+{% block title %}MIS Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col">
+    <h1 class="h3">Agency Dashboard</h1>
+  </div>
+  <div class="col-auto">
+    <a href="/api/docs/" class="btn btn-outline-secondary btn-sm">API Docs</a>
+  </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for agency in agencies %}
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ agency.name }}</h5>
+        <p class="card-text text-muted">
+          <span class="badge bg-secondary">{{ agency.canton }}</span>
+          <span class="badge bg-primary ms-1">{{ agency.subscription_tier }}</span>
+        </p>
+        <p class="card-text small">{{ agency.email }}</p>
+      </div>
+      <div class="card-footer">
+        <a href="{% url 'agency-detail' agency.id %}" class="btn btn-sm btn-outline-primary">View Stats</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <p class="text-muted">No agencies yet. Run <code>manage.py seed_agencies</code>.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

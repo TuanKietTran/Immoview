@@ -1,0 +1,20 @@
+{
+  "name": "@real-estate/image-pipeline",
+  "version": "0.1.0",
+  "main": "dist/handler.js",
+  "scripts": {
+    "build": "bun build src/handler.ts --outfile dist/handler.js --target bun --minify",
+    "typecheck": "tsc --noEmit",
+    "bundle": "bun build src/handler.ts --outfile dist/handler.js --target node"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
+    "@aws-sdk/client-sns": "^3.600.0",
+    "@real-estate/shared": "workspace:*",
+    "sharp": "^0.33.4"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.140",
+    "typescript": "^5.4.5"
+  }
+}

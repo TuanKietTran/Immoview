@@ -1,0 +1,118 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}{{ agency.name }} — MIS{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'mis-dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">{{ agency.name }}</li>
+      </ol>
+    </nav>
+    <h1 class="h3">{{ agency.name }}</h1>
+    <span class="badge bg-secondary">{{ agency.canton }}</span>
+    <span class="badge bg-primary ms-1">{{ agency.subscription_tier }}</span>
+  </div>
+</div>
+
+<!-- KPI row — server-rendered -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <div class="display-6">{{ total_listings }}</div>
+        <div class="card-text text-muted small">Total Listings</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <div class="display-6">{{ total_views }}</div>
+        <div class="card-text text-muted small">Total Views</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <div class="display-6">CHF {{ avg_price|floatformat:0 }}</div>
+        <div class="card-text text-muted small">Avg. Listing Price</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <div class="display-6">{{ lead_stats|length }}</div>
+        <div class="card-text text-muted small">Lead Stages</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- React island: price calculator -->
+<div class="card mb-4">
+  <div class="card-header">Price Calculator</div>
+  <div class="card-body">
+    <div
+      id="price-calculator-root"
+      data-props="{{ price_calculator_props|safe }}"
+    >
+      <p class="text-muted small">Loading calculator…</p>
+    </div>
+  </div>
+</div>
+
+<!-- Lead funnel chart island -->
+<div class="card mb-4">
+  <div class="card-header">Lead Funnel</div>
+  <div class="card-body">
+    <div
+      id="lead-funnel-root"
+      data-props='{"agencyId": "{{ agency.id }}"}'
+    >
+      <p class="text-muted small">Loading funnel chart…</p>
+    </div>
+  </div>
+</div>
+
+<!-- Listing bulk editor island -->
+<div class="card mb-4">
+  <div class="card-header">Listings</div>
+  <div class="card-body p-2">
+    <div
+      id="listing-bulk-editor-root"
+      data-props='{"agencyId": "{{ agency.id }}"}'
+    >
+      <p class="text-muted small">Loading listings…</p>
+    </div>
+  </div>
+</div>
+
+<!-- Listings status breakdown — server-rendered -->
+<div class="card mb-4">
+  <div class="card-header">Listings by Status</div>
+  <div class="card-body">
+    <table class="table table-sm">
+      <thead><tr><th>Status</th><th>Count</th></tr></thead>
+      <tbody>
+        {% for status, count in listings_by_status.items %}
+        <tr>
+          <td><span class="badge bg-secondary">{{ status }}</span></td>
+          <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="{% static 'islands/price-calculator.js' %}"></script>
+<script type="module" src="{% static 'islands/lead-funnel-chart.js' %}"></script>
+<script type="module" src="{% static 'islands/listing-bulk-editor.js' %}"></script>
+{% endblock %}

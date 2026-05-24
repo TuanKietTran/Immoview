@@ -1,0 +1,95 @@
+# =====================
+# Python / Django / uv
+# =====================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.log
+*.pot
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+*.env
+.env.*
+!.env.example
+
+# uv virtual environment (uv default)
+.venv/
+venv/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+*.whl
+
+# Django migrations (usually committed, but you can uncomment if you prefer)
+# */migrations/0*.py
+
+# =====================
+# Node.js / Bun / Frontends (Nuxt + React)
+# =====================
+**/node_modules
+**/bun.lockb          # old binary format (still commit the new bun.lock)
+**/bun.lock           # newer text lockfile → commit this
+
+# Build outputs
+**/dist
+**/build
+**/out
+**/.output
+**/.nuxt
+**/.nitro
+**/.cache
+**/.data
+**/.vite
+
+# Vite / React / TypeScript
+**/*.tsbuildinfo
+**/coverage
+**/.nyc_output
+
+# Nuxt specific
+cloud_front/.nuxt
+cloud_front/.output
+cloud_front/.nitro
+cloud_front/dist
+
+# React islands inside Django
+frontend-mis-islands/dist
+frontend-mis-islands/.vite
+frontend-mis-islands/static/vite/**   # if you build Vite assets into Django static
+
+# =====================
+# Logs & runtime
+# =====================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-error.log*
+
+# =====================
+# OS & Editor
+# =====================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Temporary /
