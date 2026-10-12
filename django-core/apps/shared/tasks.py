@@ -4,6 +4,7 @@ from celery import Task, shared_task
 from django.utils import timezone
 
 from .models import OutboxEvent
+from .notifications import dispatch_notification
 from .reliability import dead_letter
 
 
@@ -23,7 +24,7 @@ def publish_outbox(self, event_id: str) -> None:
     event = OutboxEvent.objects.get(pk=event_id)
     if event.status == "published":
         return
-    # Provider dispatch is intentionally an adapter boundary; mark only after it succeeds.
+    dispatch_notification(event.event_type, event.payload)
     event.status = "published"
     event.published_at = timezone.now()
     event.attempts += 1

@@ -28,7 +28,7 @@ services:
     command: >
       sh -c "uv run python manage.py migrate --noinput &&
              uv run python manage.py collectstatic --noinput &&
-             uv run ddtrace-run gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+             uv run ddtrace-run gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --graceful-timeout 30 --timeout 60"
     volumes:
       - .:/app
       - media_data:/app/media
@@ -72,6 +72,7 @@ services:
       start_period: 30s
     expose:
       - "8000"
+    stop_grace_period: 40s
 
   worker:
     build: .

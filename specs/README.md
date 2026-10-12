@@ -15,6 +15,7 @@
 | [011-duplicate-fraud](011-duplicate-fraud.md) | Duplicate fingerprint and anti-fraud flags | implemented; unit tests passed |
 | [012-postgres-search](012-postgres-search.md) | PostGIS geo and PostgreSQL FTS/trigram search | implemented; compose test passed |
 | [013-celery-reliability](013-celery-reliability.md) | Celery retries, circuit breaker and DLQ operations | implemented; config/tests passed |
+| [014-remaining-phase1-operations](014-remaining-phase1-operations.md) | Seats/stats, notifications, throttling, health and shutdown | implemented; tests/config passed |
 | [010-vn-sources](010-vn-sources.md) | Vietnam source research and lawful ingress status | decision recorded; live access unverified |
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
 | [FINAL](FINAL.md) | Final implemented/verified/unverified summary | planned |

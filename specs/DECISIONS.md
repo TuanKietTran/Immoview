@@ -23,3 +23,4 @@
 2026-10-12 — Duplicate detection uses a stable SHA-256 fingerprint with rounded coordinates and image hashes; fraud flags are explainable labels and do not automatically reject listings.
 2026-10-12 — Keep geo/FTS helpers explicitly PostgreSQL-only, enable unaccent/pg_trgm in a vendor-guarded migration, and verify radius/bbox/polygon/FTS/trigram against compose PostGIS.
 2026-10-12 — Use Celery worker/beat with Redis, late acknowledgements, max five retries, exponential capped jitter, and database DLQ records; external provider calls remain adapter responsibilities.
+2026-10-12 — Keep notification delivery behind a replaceable provider protocol; the logging provider is verified, but live email/Zalo delivery is explicitly unverified.

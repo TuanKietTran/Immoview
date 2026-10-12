@@ -177,6 +177,11 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "EXCEPTION_HANDLER": "apps.shared.exception_handler.sentry_exception_handler",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "apps.shared.throttling.PublicRateThrottle",
+        "apps.shared.throttling.AuthenticatedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {"public": "60/min", "authenticated": "300/min"},
 }
 
 # drf-spectacular

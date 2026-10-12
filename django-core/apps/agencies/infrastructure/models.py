@@ -25,6 +25,7 @@ class AgencyModel(models.Model):
     is_active = models.BooleanField(default=True)
     approved_at = models.DateTimeField(null=True, blank=True)
     approved_by_id = models.UUIDField(null=True, blank=True)
+    seat_limit = models.PositiveIntegerField(default=3)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

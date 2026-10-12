@@ -2,7 +2,11 @@ import uuid
 
 import pytest
 
-from apps.agencies.application import InvalidAgencyTransition, approve_agency, submit_for_approval
+from apps.agencies.application import (
+    InvalidAgencyTransition,
+    approve_agency,
+    submit_for_approval,
+)
 from apps.agencies.infrastructure.models import AgencyModel, AgencyStatus, KycDocument
 
 

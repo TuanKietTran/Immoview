@@ -9,13 +9,13 @@
 - [x] Phase 1.5: lead routing/SLA/viewing foundation and tests
 - [x] Phase 1.8: outbox, idempotency, retries and dead-letter records with tests
 - [x] Phase 1 audit checkpoint and gap inventory
-- [ ] Phase 1 audit: lifecycle exists, but duplicate detection (address+geo+price+image hash) and anti-fraud flags (price outlier, reused phone, stock photo) are missing
-- [ ] Phase 1 audit: Vietnam fields exist, but PostGIS geo radius/polygon/bbox, Postgres FTS/trigram/unaccent, favourites, alerts provider, SEO slugs and sitemap are missing
-- [ ] Phase 1 audit: agency onboarding exists, but KYC workflow enforcement, team-seat limits and performance stats are missing
-- [ ] Phase 1 audit: lead routing/SLA/viewings/activity foundation exists, but Python lead-scoring reference matching the Lambda contract and calendar integration are missing
-- [ ] Phase 1 audit: outbox/idempotency/DLQ records exist, but Celery worker/beat, bounded retries with backoff+jitter, circuit breaker, DLQ replay/discard/metrics are missing
-- [ ] Phase 1 audit: rate limiting, readiness/health service coverage and graceful shutdown verification are missing
-- [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (audit gaps above remain open)
+- [x] Phase 1 audit: duplicate detection and anti-fraud primitives implemented; perceptual hash/comparable integration remains open
+- [ ] Phase 1 audit: PostGIS geo/FTS implemented; favourites, alerts provider integration, SEO slugs and sitemap remain
+- [ ] Phase 1 audit: agency onboarding exists, but KYC workflow enforcement remains; team-seat limits and performance stats are implemented
+- [ ] Phase 1 audit: lead scoring reference implemented; external calendar integration remains
+- [ ] Phase 1 audit: outbox/provider dispatch is adapter-backed; live provider delivery and worker execution remain unverified
+- [x] Phase 1 audit: rate limiting, readiness/health service coverage and graceful shutdown verification
+- [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (valuation/billing/i18n remain open)
 - [ ] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test
 - [ ] Phase 3: Terraform modules/envs, Docker hardening, CI validation and parity document (validate-only scaffold passes; parity open)
 - [ ] Final verification: tests/lint/typecheck/build, specs/FINAL.md, commit and push all milestones
