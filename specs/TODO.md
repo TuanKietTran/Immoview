@@ -15,7 +15,7 @@
 - [ ] Phase 1 audit: lead scoring reference implemented; external calendar integration remains
 - [ ] Phase 1 audit: outbox/provider dispatch is adapter-backed; live provider delivery and worker execution remain unverified
 - [x] Phase 1 audit: rate limiting, readiness/health service coverage and graceful shutdown verification
-- [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (valuation v1 complete; billing/i18n remain open)
+- [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (valuation and ledger/webhook foundation complete; i18n/provider-specific formats remain open)
 - [ ] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test
 - [ ] Phase 3: Terraform modules/envs, Docker hardening, CI validation and parity document (validate-only scaffold passes; parity open)
 - [ ] Final verification: tests/lint/typecheck/build, specs/FINAL.md, commit and push all milestones
