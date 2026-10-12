@@ -43,6 +43,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
@@ -119,6 +120,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
 LANGUAGE_CODE = "en-us"
+LANGUAGES = (("en", "English"), ("vi", "Vietnamese"))
+LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Europe/Zurich"
 USE_I18N = True
 USE_TZ = True

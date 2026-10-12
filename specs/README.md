@@ -18,6 +18,7 @@
 | [014-remaining-phase1-operations](014-remaining-phase1-operations.md) | Seats/stats, notifications, throttling, health and shutdown | implemented; tests/config passed |
 | [015-valuation-v1](015-valuation-v1.md) | Deterministic commune/comparable VND valuation model | implemented; tests passed |
 | [016-billing-webhooks](016-billing-webhooks.md) | Double-entry ledger and payment webhook verification | implemented; fixture tests passed |
+| [017-i18n](017-i18n.md) | Django/Nuxt vi/en i18n foundation | implemented; Nuxt build passed |
 | [010-vn-sources](010-vn-sources.md) | Vietnam source research and lawful ingress status | decision recorded; live access unverified |
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
 | [FINAL](FINAL.md) | Final implemented/verified/unverified summary | planned |

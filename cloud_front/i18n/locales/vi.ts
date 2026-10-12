@@ -1,0 +1,7 @@
+export default {
+  language: 'Tiếng Việt',
+  listing: 'Tin đăng',
+  search: 'Tìm kiếm',
+  savedSearches: 'Tìm kiếm đã lưu',
+  contactAgent: 'Liên hệ môi giới'
+} as const

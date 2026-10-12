@@ -26,3 +26,4 @@
 2026-10-12 — Keep notification delivery behind a replaceable provider protocol; the logging provider is verified, but live email/Zalo delivery is explicitly unverified.
 2026-10-12 — Valuation v1 averages commune comparables with an optional official rate, returns a reproducible ±15% interval and explanations, and never presents fixture estimates as live market truth.
 2026-10-12 — Ledger posting requires balanced positive debit/credit totals in one transaction; webhook verification is provider allow-listed and canonical-HMAC fixture based until provider-specific docs are encoded.
+2026-10-12 — Use Django LocaleMiddleware and a small typed Nuxt locale composable for the initial vi/en foundation; translation completeness is not claimed.
