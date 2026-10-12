@@ -100,6 +100,53 @@ class AuditLog(models.Model):
         raise ValueError("AuditLog records cannot be deleted")
 
 
+class OutboxEvent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    event_type = models.CharField(max_length=120)
+    aggregate_type = models.CharField(max_length=80)
+    aggregate_id = models.CharField(max_length=100)
+    payload = models.JSONField(default=dict)
+    status = models.CharField(max_length=20, default="pending")
+    attempts = models.PositiveSmallIntegerField(default=0)
+    available_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    published_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "outbox_events"
+        indexes = [models.Index(fields=["status", "available_at"])]
+
+
+class IdempotencyRecord(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    key = models.CharField(max_length=255)
+    endpoint = models.CharField(max_length=255)
+    request_hash = models.CharField(max_length=64)
+    response_code = models.PositiveSmallIntegerField(null=True, blank=True)
+    response_body = models.JSONField(null=True, blank=True)
+    expires_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "idempotency_records"
+        constraints = [models.UniqueConstraint(fields=["key", "endpoint"], name="idempotency_key_endpoint")]
+
+
+class DeadLetterTask(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    task_name = models.CharField(max_length=200)
+    payload = models.JSONField(default=dict)
+    error = models.TextField()
+    attempts = models.PositiveSmallIntegerField(default=0)
+    status = models.CharField(max_length=20, default="pending")
+    last_attempt_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "dead_letter_tasks"
+        indexes = [models.Index(fields=["status", "created_at"])]
+
+
 class ApiKey(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     agency = models.ForeignKey(

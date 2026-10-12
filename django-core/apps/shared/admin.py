@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Membership, AuditLog, ApiKey
+from .models import ApiKey, AuditLog, DeadLetterTask, IdempotencyRecord, Membership, OutboxEvent, User
 
 
 @admin.register(User)
@@ -43,6 +43,27 @@ class AuditLogAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+@admin.register(OutboxEvent)
+class OutboxEventAdmin(admin.ModelAdmin):
+    list_display = ["event_type", "aggregate_type", "aggregate_id", "status", "attempts", "created_at"]
+    list_filter = ["status", "event_type"]
+    readonly_fields = [f.name for f in OutboxEvent._meta.fields]
+
+
+@admin.register(IdempotencyRecord)
+class IdempotencyRecordAdmin(admin.ModelAdmin):
+    list_display = ["key", "endpoint", "response_code", "expires_at", "created_at"]
+    search_fields = ["key", "endpoint"]
+    readonly_fields = [f.name for f in IdempotencyRecord._meta.fields]
+
+
+@admin.register(DeadLetterTask)
+class DeadLetterTaskAdmin(admin.ModelAdmin):
+    list_display = ["task_name", "status", "attempts", "created_at"]
+    list_filter = ["status", "task_name"]
+    readonly_fields = ["id", "created_at"]
 
 
 @admin.register(ApiKey)
