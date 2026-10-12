@@ -1,0 +1,4 @@
+<listings>
+  <listing><external_id>x-1</external_id><title>Nha pho</title><area_m2>60</area_m2><price_vnd>3000000000</price_vnd></listing>
+  <listing><external_id>x-2</external_id><title></title><area_m2>-1</area_m2><price_vnd>10</price_vnd></listing>
+</listings>

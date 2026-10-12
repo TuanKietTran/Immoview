@@ -24,4 +24,5 @@
 | [010-vn-sources](010-vn-sources.md) | Vietnam source research and lawful ingress status | decision recorded; live access unverified |
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
 | [021-ingest-core](021-ingest-core.md) | Ingest raw landing, Pydantic normalize, upsert and DLQ core | implemented; tests passed |
+| [022-ingest-connectors](022-ingest-connectors.md) | Fixture-backed lawful VN connector primitives and contracts | implemented; fixtures only, not live |
 | [FINAL](FINAL.md) | Final implemented/verified/unverified summary | checkpoint recorded; open gaps listed |
