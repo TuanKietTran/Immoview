@@ -11,6 +11,7 @@ class ListingModel(models.Model):
     agency_id = models.UUIDField(db_index=True)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=280, blank=True, db_index=True)
+    source_external_id = models.CharField(max_length=160, blank=True, unique=True, db_index=True)
     description = models.TextField()
     property_type = models.CharField(max_length=20, choices=[(t.value, t.name) for t in PropertyType])
     offer_type = models.CharField(max_length=10, choices=[(t.value, t.name) for t in OfferType])

@@ -20,6 +20,7 @@
 | [016-billing-webhooks](016-billing-webhooks.md) | Double-entry ledger and payment webhook verification | implemented; fixture tests passed |
 | [017-i18n](017-i18n.md) | Django/Nuxt vi/en i18n foundation | implemented; Nuxt build passed |
 | [018-favourites-seo](018-favourites-seo.md) | Unique favourites and listing slug foundation | implemented; test passed |
+| [019-throughput](019-throughput.md) | 100k synthetic idempotent import benchmark | compose run twice; counts stable |
 | [010-vn-sources](010-vn-sources.md) | Vietnam source research and lawful ingress status | decision recorded; live access unverified |
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
 | [FINAL](FINAL.md) | Final implemented/verified/unverified summary | planned |
