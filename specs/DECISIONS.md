@@ -21,3 +21,4 @@
 2026-10-12 — The Phase 1 audit marks only tested foundations complete; all listed duplicate/fraud, geo/FTS, provider, Celery, circuit-breaker, metrics, and operational gaps remain open until verified.
 2026-10-12 — Implement lead scoring as a Python reference copied semantically from the existing TypeScript contract, with deterministic injected time for contract tests and no claim of live Lambda verification.
 2026-10-12 — Duplicate detection uses a stable SHA-256 fingerprint with rounded coordinates and image hashes; fraud flags are explainable labels and do not automatically reject listings.
+2026-10-12 — Keep geo/FTS helpers explicitly PostgreSQL-only, enable unaccent/pg_trgm in a vendor-guarded migration, and verify radius/bbox/polygon/FTS/trigram against compose PostGIS.
