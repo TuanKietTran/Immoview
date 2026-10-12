@@ -4,19 +4,24 @@ import pytest
 from django.db import connection
 
 from apps.listings.infrastructure.models import ListingModel
-from apps.listings.search import bbox_search, polygon_search, radius_search, text_search, trigram_search
-
+from apps.listings.search import (
+    bbox_search,
+    polygon_search,
+    radius_search,
+    text_search,
+    trigram_search,
+)
 
 pytestmark = pytest.mark.skipif(connection.vendor != "postgresql", reason="requires compose PostgreSQL/PostGIS")
 
 
 @pytest.fixture
 def spatial_listings(db: None) -> list[ListingModel]:
-    base = dict(
-        agency_id=uuid.uuid4(), description="Căn hộ gần sông", property_type="apartment",
-        offer_type="sale", street="A", street_number="1", postcode="5500", city="Da Nang",
-        canton="VN", price_chf=0, area_m2=60,
-    )
+    base = {
+        "agency_id": uuid.uuid4(), "description": "Căn hộ gần sông", "property_type": "apartment",
+        "offer_type": "sale", "street": "A", "street_number": "1", "postcode": "5500", "city": "Da Nang",
+        "canton": "VN", "price_chf": 0, "area_m2": 60,
+    }
     near = ListingModel.objects.create(title="River apartment", latitude=16.0544, longitude=108.2022, **base)
     far = ListingModel.objects.create(title="Far house", latitude=21.0285, longitude=105.8542, **{**base, "description": "Nhà ngoại ô"})
     return [near, far]

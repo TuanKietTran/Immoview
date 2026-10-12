@@ -23,4 +23,4 @@
 | [019-throughput](019-throughput.md) | 100k synthetic idempotent import benchmark | compose run twice; counts stable |
 | [010-vn-sources](010-vn-sources.md) | Vietnam source research and lawful ingress status | decision recorded; live access unverified |
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
-| [FINAL](FINAL.md) | Final implemented/verified/unverified summary | planned |
+| [FINAL](FINAL.md) | Final implemented/verified/unverified summary | checkpoint recorded; open gaps listed |

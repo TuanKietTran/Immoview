@@ -18,7 +18,7 @@
 - [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (valuation, ledger/webhook foundation and vi/en foundation complete; provider-specific formats remain open)
 - [ ] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test (research refresh and synthetic 100k idempotency benchmark recorded; connectors open)
 - [ ] Phase 3: Terraform modules/envs, Docker hardening, CI validation and parity document (validate-only scaffold passes; parity open)
-- [ ] Final verification: tests/lint/typecheck/build, specs/FINAL.md, commit and push all milestones
+- [ ] Final verification: smoke/benchmark/Terraform/security evidence recorded in `specs/FINAL.md`; full connector fixture coverage and remaining open gaps still require completion
 
 ## Done
 - [x] Read and committed the commander brief before implementation
