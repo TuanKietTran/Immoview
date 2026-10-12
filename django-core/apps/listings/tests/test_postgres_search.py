@@ -1,9 +1,13 @@
 import uuid
 
 import pytest
+from django.db import connection
 
 from apps.listings.infrastructure.models import ListingModel
 from apps.listings.search import bbox_search, polygon_search, radius_search, text_search, trigram_search
+
+
+pytestmark = pytest.mark.skipif(connection.vendor != "postgresql", reason="requires compose PostgreSQL/PostGIS")
 
 
 @pytest.fixture
