@@ -16,7 +16,7 @@
 - [ ] Phase 1 audit: outbox/provider dispatch is adapter-backed; live provider delivery and worker execution remain unverified
 - [x] Phase 1 audit: rate limiting, readiness/health service coverage and graceful shutdown verification
 - [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (valuation, ledger/webhook foundation and vi/en foundation complete; provider-specific formats remain open)
-- [x] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test (core/connectors/quality loader complete; 100k attempt exceeded session SLA without timing)
+- [x] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test (core/connectors/quality loader complete; 100k idempotent ingest completed twice under SQLite test settings)
 - [ ] Phase 3: Terraform modules/envs, Docker hardening, CI validation and parity document (modules/envs/CDK removal/CI/Docker/parity complete; Terraform provider initialization/validate remains unverified)
 - [ ] Final verification: smoke/benchmark/Terraform/security evidence recorded in `specs/FINAL.md`; full connector fixture coverage and remaining open gaps still require completion
 
