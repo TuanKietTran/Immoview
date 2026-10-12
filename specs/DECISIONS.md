@@ -24,3 +24,4 @@
 2026-10-12 — Keep geo/FTS helpers explicitly PostgreSQL-only, enable unaccent/pg_trgm in a vendor-guarded migration, and verify radius/bbox/polygon/FTS/trigram against compose PostGIS.
 2026-10-12 — Use Celery worker/beat with Redis, late acknowledgements, max five retries, exponential capped jitter, and database DLQ records; external provider calls remain adapter responsibilities.
 2026-10-12 — Keep notification delivery behind a replaceable provider protocol; the logging provider is verified, but live email/Zalo delivery is explicitly unverified.
+2026-10-12 — Valuation v1 averages commune comparables with an optional official rate, returns a reproducible ±15% interval and explanations, and never presents fixture estimates as live market truth.
