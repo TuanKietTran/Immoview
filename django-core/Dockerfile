@@ -1,9 +1,14 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:0.11.16 /uv /uvx /bin/
 
 WORKDIR /app
+
+# Native libraries required by Django's PostGIS/GEOS integration.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgdal-dev libgeos-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files first for layer caching
 COPY pyproject.toml uv.lock ./

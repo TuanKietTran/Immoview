@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_DB: realestate
+          POSTGRES_USER: realestate
+          POSTGRES_PASSWORD: realestate
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd="pg_isready -U realestate -d realestate"
+          --health-interval=5s --health-timeout=5s --health-retries=10
+    defaults:
+      run:
+        working-directory: django-core
+    env:
+      SECRET_KEY: ci-only-secret
+      DEBUG: "true"
+      ALLOWED_HOSTS: localhost
+      DB_HOST: localhost
+      DB_NAME: realestate
+      DB_USER: realestate
+      DB_PASSWORD: realestate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: django-core/.python-version
+      - run: uv sync --dev
+      - run: uv run python manage.py migrate --noinput
+      - run: uv run pytest -q
+      - run: uv run ruff check .
+      - run: uv run mypy apps config
+
+  frontends:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: cloud_front/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: cloud_front
+      - run: pnpm typecheck
+        working-directory: cloud_front
+      - run: pnpm build
+        working-directory: cloud_front
+      - run: bun install --frozen-lockfile
+        working-directory: frontend-mis-islands
+      - run: bun run typecheck
+        working-directory: frontend-mis-islands
+      - run: bun run build
+        working-directory: frontend-mis-islands
+
+  terraform:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('infra/terraform/**/*.tf') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: make tf-check

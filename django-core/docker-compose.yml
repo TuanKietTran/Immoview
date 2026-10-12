@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16-alpine
+    image: postgis/postgis:16-3.5-alpine
     environment:
       POSTGRES_DB: realestate
       POSTGRES_USER: realestate
@@ -8,7 +8,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U realestate"]
+      test: ["CMD-SHELL", "pg_isready -U realestate -d realestate"]
       interval: 5s
       timeout: 5s
       retries: 5
