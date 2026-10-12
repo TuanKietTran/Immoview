@@ -14,3 +14,4 @@
 2026-10-12 — Use the generated Nuxt Nitro server directly for local verification because this Nuxt preview wrapper mis-parses the host argument; the generated server returned HTTP 200.
 2026-10-12 — Enforce listing transitions in a row-locked application service and write an audit event in the same transaction; invalid transitions produce no audit record.
 2026-10-12 — Add Vietnamese fields as nullable migration-safe columns while legacy Swiss columns remain; VND amounts are integer đồng and per-m² values require a total VND price.
+2026-10-12 — Store saved-search criteria as versionable JSON owned by UUID user_id, with unique names per user; advanced geo/full-text indexes remain separate work.

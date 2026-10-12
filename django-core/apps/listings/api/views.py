@@ -4,17 +4,29 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 
-from apps.listings.infrastructure.models import ListingModel, PhotoModel
+from apps.listings.infrastructure.models import ListingModel, PhotoModel, SavedSearchModel
 from apps.listings.domain.services import publish_listing, archive_listing
 from apps.listings.infrastructure.repositories import ListingRepository
 from apps.listings.domain.value_objects import ListingId
 from apps.shared.audit import log_action
 from apps.shared.metrics import increment
 from apps.shared.permissions import IsAgencyMember, AgentRequired
-from .serializers import ListingSerializer, ListingWriteSerializer
+from .serializers import ListingSerializer, ListingWriteSerializer, SavedSearchSerializer
 from .filters import ListingFilter
 
 logger = logging.getLogger(__name__)
+
+
+class SavedSearchViewSet(viewsets.ModelViewSet):
+    serializer_class = SavedSearchSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ["get", "post", "patch", "delete", "head", "options"]
+
+    def get_queryset(self):
+        return SavedSearchModel.objects.filter(user_id=self.request.user.id)
+
+    def perform_create(self, serializer):
+        serializer.save(user_id=self.request.user.id)
 
 
 class ListingViewSet(viewsets.ModelViewSet):

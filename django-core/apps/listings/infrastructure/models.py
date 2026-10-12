@@ -72,6 +72,20 @@ class ListingModel(models.Model):
         return f"{self.title} ({self.postcode} {self.city})"
 
 
+class SavedSearchModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.UUIDField(db_index=True)
+    name = models.CharField(max_length=120)
+    query = models.JSONField(default=dict)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "listing_saved_searches"
+        constraints = [models.UniqueConstraint(fields=["user_id", "name"], name="saved_search_user_name")]
+
+
 class ListingAuditEvent(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     listing = models.ForeignKey(ListingModel, on_delete=models.CASCADE, related_name="audit_events")

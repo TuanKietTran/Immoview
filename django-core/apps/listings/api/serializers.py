@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.listings.infrastructure.models import ListingModel, PhotoModel
+from apps.listings.infrastructure.models import ListingModel, PhotoModel, SavedSearchModel
 
 
 class PhotoSerializer(serializers.ModelSerializer):
@@ -19,7 +19,9 @@ class ListingSerializer(serializers.ModelSerializer):
             "id", "agency_id", "title", "description",
             "property_type", "offer_type",
             "street", "street_number", "postcode", "city", "canton",
-            "price_chf", "price_display", "address_display",
+            "price_chf", "price_vnd", "price_per_m2_vnd", "price_display", "address_display",
+            "province_code", "commune_code", "legal_status", "direction", "frontage_m", "alley_width_m",
+            "floors", "bedrooms", "project", "developer", "planning_status", "land_use_type",
             "area_m2", "rooms", "status", "view_count",
             "photos", "created_at", "updated_at",
         ]
@@ -32,6 +34,13 @@ class ListingSerializer(serializers.ModelSerializer):
         return f"{obj.street} {obj.street_number}, {obj.postcode} {obj.city}"
 
 
+class SavedSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavedSearchModel
+        fields = ["id", "name", "query", "active", "created_at", "updated_at"]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+
 class ListingWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = ListingModel
@@ -39,5 +48,7 @@ class ListingWriteSerializer(serializers.ModelSerializer):
             "agency_id", "title", "description",
             "property_type", "offer_type",
             "street", "street_number", "postcode", "city", "canton",
-            "price_chf", "area_m2", "rooms",
+            "price_chf", "price_vnd", "price_per_m2_vnd", "province_code", "commune_code",
+            "legal_status", "direction", "frontage_m", "alley_width_m", "floors", "bedrooms",
+            "project", "developer", "planning_status", "land_use_type", "area_m2", "rooms",
         ]
