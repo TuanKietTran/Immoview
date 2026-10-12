@@ -8,6 +8,7 @@
 - [x] Phase 1.4: agency onboarding/approval roles and tests
 - [x] Phase 1.5: lead routing/SLA/viewing foundation and tests
 - [x] Phase 1.8: outbox, idempotency, retries and dead-letter records with tests
+- [x] Phase 1 audit checkpoint and gap inventory
 - [ ] Phase 1 audit: lifecycle exists, but duplicate detection (address+geo+price+image hash) and anti-fraud flags (price outlier, reused phone, stock photo) are missing
 - [ ] Phase 1 audit: Vietnam fields exist, but PostGIS geo radius/polygon/bbox, Postgres FTS/trigram/unaccent, favourites, alerts provider, SEO slugs and sitemap are missing
 - [ ] Phase 1 audit: agency onboarding exists, but KYC workflow enforcement, team-seat limits and performance stats are missing
@@ -24,7 +25,7 @@
 - [x] Recorded Phase 0 baseline evidence in `specs/001-baseline.md`
 
 ## Audit priority order
-- [ ] Lead scoring Python reference and contract tests
+- [x] Lead scoring Python reference and contract tests
 - [ ] Duplicate detection and anti-fraud scoring
 - [ ] PostGIS geo and PostgreSQL FTS/trigram/unaccent search with real compose database tests
 - [ ] Celery bounded retries, circuit breaker, DLQ admin replay/discard/metrics
