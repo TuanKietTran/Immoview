@@ -7,6 +7,7 @@
 | [002-listings-moderation](002-listings-moderation.md) | Listing lifecycle, audit trail, and moderation foundation | implemented; tests passed |
 | [003-vietnam-listing-fields](003-vietnam-listing-fields.md) | VND pricing and post-reform Vietnamese listing fields | implemented; tests passed |
 | [004-search-saved-searches](004-search-saved-searches.md) | VND facets and saved-search API foundation | implemented; tests passed |
+| [005-agency-onboarding](005-agency-onboarding.md) | Agency approval workflow and KYC metadata | implemented; tests passed |
 | [010-vn-sources](010-vn-sources.md) | Vietnam source research and lawful ingress status | decision recorded; live access unverified |
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
 | [FINAL](FINAL.md) | Final implemented/verified/unverified summary | planned |
