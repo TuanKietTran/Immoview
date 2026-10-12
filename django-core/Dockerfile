@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Native libraries required by Django's PostGIS/GEOS integration.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libgdal-dev libgeos-dev \
+    && apt-get install -y --no-install-recommends libgdal36 libgeos3.13.1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files first for layer caching

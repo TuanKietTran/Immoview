@@ -6,7 +6,9 @@
 2026-10-12 — Use fixture/docs verification for Vietnam sources and label every connector not tested with live credentials as unverified.
 2026-10-12 — Use Terraform as the AWS source of truth and restrict checks to fmt, backend-less init, validate, and static scans; never run plan/apply.
 2026-10-12 — The initial compose timeout is recorded as slow first boot while web health was starting; migrations and `manage.py check` passed, while pytest failed because it is not installed.
-2026-10-12 — PostGIS is enabled through Django's PostGIS backend and the runtime image installs GDAL/GEOS native libraries; local macOS verification is blocked unless those libraries are available.
+2026-10-12 — PostGIS is enabled through Django's PostGIS backend and the runtime image installs GDAL/GEOS native libraries; compose uses amd64 emulation for the PostGIS image on Apple Silicon.
 2026-10-12 — CI uses a PostGIS service and injects non-production settings rather than weakening production `SECRET_KEY` handling.
 2026-10-12 — Listing lifecycle now requires draft -> pending_review -> published before reservation/sale; rented and expired are explicit terminal/active transitions and are covered by domain tests.
-2026-10-12 — Terraform parity work starts with a small validate-only S3 raw landing and SQS DLQ scaffold; CDK parity is not claimed until every resource is ported and documented.
+2026-10-12 — Terraform files remain future-phase work and are not marked complete; no AWS plan/apply was run.
+2026-10-12 — Keep nginx on development host port 8081 because an unrelated local process owns 8080; verified API/admin through nginx on 8081.
+2026-10-12 — Use the generated Nuxt Nitro server directly for local verification because this Nuxt preview wrapper mis-parses the host argument; the generated server returned HTTP 200.

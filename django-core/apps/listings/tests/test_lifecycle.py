@@ -1,4 +1,11 @@
-from apps.listings.domain.entities import Listing, ListingStatus, OfferType, PropertyType
+from decimal import Decimal
+
+from apps.listings.domain.entities import (
+    Listing,
+    ListingStatus,
+    OfferType,
+    PropertyType,
+)
 from apps.listings.domain.value_objects import ListingId, Money, SwissAddress
 
 
@@ -7,7 +14,7 @@ def listing() -> Listing:
         id=ListingId.generate(), agency_id="agency-1", title="Home", description="Home",
         property_type=PropertyType.APARTMENT, offer_type=OfferType.SALE,
         address=SwissAddress("Main", "1", "8000", "Zurich", "ZH"),
-        price=Money(100), area_m2=50, rooms=2,
+        price=Money(Decimal(100)), area_m2=50, rooms=2,
     )
 
 

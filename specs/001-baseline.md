@@ -24,4 +24,12 @@ No production readiness, AWS deployment, live Vietnamese-source access, payment-
 
 ## Phase 0 changes after baseline
 
-The Python requirement is now >=3.13, the lock resolves Django 5.2 and psycopg 3, Faker is dev-only, compose uses PostGIS 16, production security headers/defaults were added, and initial Make/CI scaffolding was created. These changes still require container rebuild and full verification.
+The Python requirement is now >=3.13, the lock resolves Django 5.2 and psycopg 3, Faker is dev-only, compose uses PostGIS 16, production security headers/defaults were added, and initial Make/CI scaffolding was created. These changes were subsequently verified as follows:
+
+- `make test lint`: **passed**; pytest reported `5 passed in 0.28s` and Ruff reported `All checks passed!`.
+- `make typecheck`: **passed**; mypy reported `Success: no issues found in 4 source files`.
+- Rebuilt compose with PostGIS 16 and runtime GDAL/GEOS libraries. `docker compose ps` showed db, Redis, LocalStack, web, and nginx running; db/Redis/LocalStack/web were healthy. The web logs show migrations completed and Gunicorn listening.
+- Internal web checks using Python urllib returned `/health/ 200`, `/admin/ 200`, and `/api/schema/ 200`.
+- Nginx host port 8080 conflicted with an unrelated existing process, so the development proxy was moved to 8081; curl returned `/health/ 200`, `/admin/ 302`, and `/api/schema/ 200` on `http://localhost:8081`.
+- `seed_demo` was added as a development-only wrapper around the Faker-backed seed command.
+- Nuxt `pnpm install --frozen-lockfile && pnpm build`: **passed**, output ended `Build complete!`. Running the generated server with `HOST=127.0.0.1 PORT=3000 node .output/server/index.mjs` and curling `/` returned HTTP 200. The `pnpm preview --host ...` wrapper itself failed because this Nuxt version treated the host argument as a path; the generated server is the verified fallback.

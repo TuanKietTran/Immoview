@@ -1,8 +1,8 @@
 from __future__ import annotations
+
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
-from typing import Optional
 
 from .value_objects import ListingId, Money, SwissAddress
 
@@ -42,10 +42,10 @@ class Listing:
     address: SwissAddress
     price: Money
     area_m2: float
-    rooms: Optional[float]
+    rooms: float | None
     status: ListingStatus = ListingStatus.DRAFT
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def submit_for_review(self) -> None:
         if self.status != ListingStatus.DRAFT:
@@ -90,5 +90,4 @@ class Listing:
         self._touch()
 
     def _touch(self) -> None:
-        from datetime import datetime
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)

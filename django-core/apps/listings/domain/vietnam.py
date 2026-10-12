@@ -17,12 +17,12 @@ class VNDPrice:
             raise ValueError("VND amount cannot be negative")
 
     @classmethod
-    def from_decimal(cls, value: Decimal) -> "VNDPrice":
+    def from_decimal(cls, value: Decimal) -> VNDPrice:
         if value != value.to_integral_value():
             raise ValueError("VND must be a whole đồng amount")
         return cls(int(value))
 
-    def per_square_metre(self, area_m2: Decimal) -> "VNDPrice":
+    def per_square_metre(self, area_m2: Decimal) -> VNDPrice:
         if area_m2 <= 0:
             raise ValueError("area must be positive")
         return VNDPrice(round(self.amount / area_m2))
