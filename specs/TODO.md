@@ -6,6 +6,7 @@
 - [x] Phase 1.2: Vietnam listing fields and validation tests
 - [x] Phase 1.3: search/facets and saved-search foundation with tests
 - [x] Phase 1.4: agency onboarding/approval roles and tests
+- [x] Phase 1.5: lead routing/SLA/viewing foundation and tests
 - [ ] Phase 1: listing lifecycle/moderation and Vietnam-specific fields (lifecycle, audit, moderation foundation complete; Vietnam fields open)
 - [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (search filters/saved-search foundation complete; remaining items open)
 - [ ] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test
