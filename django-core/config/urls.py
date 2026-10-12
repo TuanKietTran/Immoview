@@ -1,11 +1,13 @@
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from apps.listings.sitemap import sitemap
+from apps.shared.health import liveness, readiness
+from apps.shared.health import services as services_health
 from apps.shared.views import jwks
-from apps.shared.health import liveness, readiness, services as services_health
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,6 +29,7 @@ urlpatterns = [
     # OpenAPI
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("sitemap.xml", sitemap, name="sitemap"),
     # MIS templates (internal)
     path("mis/", include("apps.agencies.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
