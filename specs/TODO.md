@@ -10,13 +10,13 @@
 - [x] Phase 1.8: outbox, idempotency, retries and dead-letter records with tests
 - [x] Phase 1 audit checkpoint and gap inventory
 - [x] Phase 1 audit: duplicate detection and anti-fraud primitives implemented; perceptual hash/comparable integration remains open
-- [ ] Phase 1 audit: PostGIS geo/FTS and favourites/slugs implemented; alerts provider integration and sitemap remain
+- [ ] Phase 1 audit: geo/FTS, favourites, slugs, sitemap and notification adapter implemented; alert delivery integration remains
 - [ ] Phase 1 audit: agency onboarding exists, but KYC workflow enforcement remains; team-seat limits and performance stats are implemented
 - [ ] Phase 1 audit: lead scoring reference implemented; external calendar integration remains
 - [ ] Phase 1 audit: outbox/provider dispatch is adapter-backed; live provider delivery and worker execution remain unverified
 - [x] Phase 1 audit: rate limiting, readiness/health service coverage and graceful shutdown verification
 - [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives (valuation, ledger/webhook foundation and vi/en foundation complete; provider-specific formats remain open)
-- [ ] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test (research refresh and synthetic 100k idempotency benchmark recorded; connectors open)
+- [ ] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test (ingest core, research refresh and synthetic benchmark recorded; connectors/orchestration open)
 - [ ] Phase 3: Terraform modules/envs, Docker hardening, CI validation and parity document (validate-only scaffold passes; parity open)
 - [ ] Final verification: smoke/benchmark/Terraform/security evidence recorded in `specs/FINAL.md`; full connector fixture coverage and remaining open gaps still require completion
 

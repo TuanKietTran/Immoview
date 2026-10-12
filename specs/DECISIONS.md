@@ -28,3 +28,4 @@
 2026-10-12 — Ledger posting requires balanced positive debit/credit totals in one transaction; webhook verification is provider allow-listed and canonical-HMAC fixture based until provider-specific docs are encoded.
 2026-10-12 — Use Django LocaleMiddleware and a small typed Nuxt locale composable for the initial vi/en foundation; translation completeness is not claimed.
 2026-10-12 — Treat primary government domains as source leads and require an official code-list/table fixture before marking Vietnam administrative or land-price ingestion verified; noisy search results are not evidence.
+2026-10-12 — Ingest core stores immutable raw payloads and hashes before Pydantic normalization; failed quality checks become source-scoped dead letters and no connector is marked live without a fixture contract test.

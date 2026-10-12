@@ -16,6 +16,7 @@ dependencies = [
     "drf-spectacular>=0.28",
     "gunicorn>=23",
     "pillow>=11",
+    "pydantic>=2.11",
     "psycopg[binary]>=3.2",
     "python-decouple>=3.8",
     "redis>=6",
@@ -23,6 +24,11 @@ dependencies = [
     "whitenoise[brotli]>=6.9",
     "ddtrace>=3.10",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"apps/ingest/models.py" = ["RUF012"]
+"apps/ingest/admin.py" = ["RUF012"]
+"apps/ingest/migrations/*.py" = ["RUF012", "I001"]
 
 [dependency-groups]
 dev = [
