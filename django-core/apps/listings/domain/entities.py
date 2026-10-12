@@ -9,9 +9,12 @@ from .value_objects import ListingId, Money, SwissAddress
 
 class ListingStatus(str, Enum):
     DRAFT = "draft"
+    PENDING_REVIEW = "pending_review"
     PUBLISHED = "published"
     RESERVED = "reserved"
     SOLD = "sold"
+    RENTED = "rented"
+    EXPIRED = "expired"
     ARCHIVED = "archived"
 
 
@@ -44,8 +47,14 @@ class Listing:
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
+    def submit_for_review(self) -> None:
+        if self.status != ListingStatus.DRAFT:
+            raise ValueError("Only draft listings can enter review")
+        self.status = ListingStatus.PENDING_REVIEW
+        self._touch()
+
     def publish(self) -> None:
-        if self.status not in (ListingStatus.DRAFT, ListingStatus.ARCHIVED):
+        if self.status not in (ListingStatus.PENDING_REVIEW, ListingStatus.ARCHIVED):
             raise ValueError(f"Cannot publish a listing with status {self.status}")
         self.status = ListingStatus.PUBLISHED
         self._touch()
@@ -66,6 +75,18 @@ class Listing:
         if self.status not in (ListingStatus.PUBLISHED, ListingStatus.RESERVED):
             raise ValueError("Can only mark published or reserved listings as sold")
         self.status = ListingStatus.SOLD
+        self._touch()
+
+    def mark_rented(self) -> None:
+        if self.status not in (ListingStatus.PUBLISHED, ListingStatus.RESERVED):
+            raise ValueError("Can only mark published or reserved listings as rented")
+        self.status = ListingStatus.RENTED
+        self._touch()
+
+    def expire(self) -> None:
+        if self.status not in (ListingStatus.PUBLISHED, ListingStatus.RESERVED):
+            raise ValueError("Only active listings can expire")
+        self.status = ListingStatus.EXPIRED
         self._touch()
 
     def _touch(self) -> None:

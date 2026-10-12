@@ -8,3 +8,5 @@
 2026-10-12 — The initial compose timeout is recorded as slow first boot while web health was starting; migrations and `manage.py check` passed, while pytest failed because it is not installed.
 2026-10-12 — PostGIS is enabled through Django's PostGIS backend and the runtime image installs GDAL/GEOS native libraries; local macOS verification is blocked unless those libraries are available.
 2026-10-12 — CI uses a PostGIS service and injects non-production settings rather than weakening production `SECRET_KEY` handling.
+2026-10-12 — Listing lifecycle now requires draft -> pending_review -> published before reservation/sale; rented and expired are explicit terminal/active transitions and are covered by domain tests.
+2026-10-12 — Terraform parity work starts with a small validate-only S3 raw landing and SQS DLQ scaffold; CDK parity is not claimed until every resource is ported and documented.
