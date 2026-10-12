@@ -10,7 +10,7 @@
 - [x] Phase 1.8: outbox, idempotency, retries and dead-letter records with tests
 - [x] Phase 1 audit checkpoint and gap inventory
 - [x] Phase 1 audit: duplicate detection and anti-fraud primitives implemented; perceptual hash/comparable integration remains open
-- [ ] Phase 1 audit: PostGIS geo/FTS implemented; favourites, alerts provider integration, SEO slugs and sitemap remain
+- [ ] Phase 1 audit: PostGIS geo/FTS and favourites/slugs implemented; alerts provider integration and sitemap remain
 - [ ] Phase 1 audit: agency onboarding exists, but KYC workflow enforcement remains; team-seat limits and performance stats are implemented
 - [ ] Phase 1 audit: lead scoring reference implemented; external calendar integration remains
 - [ ] Phase 1 audit: outbox/provider dispatch is adapter-backed; live provider delivery and worker execution remain unverified

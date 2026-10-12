@@ -10,6 +10,7 @@ class ListingModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     agency_id = models.UUIDField(db_index=True)
     title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=280, blank=True, db_index=True)
     description = models.TextField()
     property_type = models.CharField(max_length=20, choices=[(t.value, t.name) for t in PropertyType])
     offer_type = models.CharField(max_length=10, choices=[(t.value, t.name) for t in OfferType])
@@ -74,6 +75,17 @@ class ListingModel(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title} ({self.postcode} {self.city})"
+
+
+class FavouriteModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.UUIDField(db_index=True)
+    listing = models.ForeignKey(ListingModel, on_delete=models.CASCADE, related_name="favourites")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "listing_favourites"
+        constraints = [models.UniqueConstraint(fields=["user_id", "listing"], name="favourite_user_listing")]
 
 
 class SavedSearchModel(models.Model):
