@@ -1,0 +1,55 @@
+# 000 Brief: revive Immoview (Vietnam real-estate marketplace management system), 2026
+
+Owner: the pi agent in this directory (repo `TuanKietTran/Immoview`, local `~/Downloads/Immoview`). Commander: the Claude session that wrote this. Decide yourself, record each decision as one line in `specs/DECISIONS.md`, never ask back.
+
+## What exists (read the code first; verify, do not assume)
+Monorepo, single commit: `django-core/` (Django 5.0.6, DRF, allauth, simplejwt, drf-spectacular, Redis, Sentry, ddtrace; apps `agencies`, `billing`, `leads`, `listings`, `valuations`, `shared`; DDD-ish `infrastructure/` layers; Dockerfile, compose, nginx, Datadog dashboard/monitors), `frontend-mis-islands/` (Vite + TS islands for the MIS/admin), `cloud_front/` (Nuxt public site), `serverless-aws/` (AWS CDK + services `image-pipeline`, `lead-scoring`, `notifications`, shared lib, localstack init). The project is stale (mid-2024 dependency pins). "Revive" = bring it current, make it really work end to end, add the features below, add real data ingress from Vietnamese sources, and make it **ready to deploy to AWS with Terraform** (the user will deploy next session).
+
+## Phase 0 (first ~25 min): make the foundation work and current
+- Run it as-is first (`docker compose`, migrations, tests if any) and write down what is broken in `specs/001-baseline.md`.
+- Upgrade to current stable: **Django 5.2 LTS or newer** (check release notes/PyPI now, Django 5.0 is end-of-life), DRF, allauth, simplejwt, psycopg 3, Python 3.13+, Pillow, gunicorn, sentry-sdk, remove `psycopg2-binary`/pinned-stale versions, drop `faker` from runtime deps. Keep `uv`. Frontends: bump Nuxt, Vite, TypeScript and the toolchain to current stable, keep `bun`/`pnpm` as the repo already does, no `.mjs` files you create.
+- PostgreSQL 16 + **PostGIS** and Redis in compose; settings from environment; secure production defaults (HSTS, secure cookies, CSRF, password validators, `ALLOWED_HOSTS`, argon2 already present).
+- Tests: `pytest-django`, `factory_boy`, `hypothesis` for money/price maths; `ruff`, `mypy`+`django-stubs`; `make test lint` green; `.github/workflows/ci.yml` (Python tests with Postgres/PostGIS service, frontend typecheck/build, `terraform fmt -check` and `validate`, docker build).
+- Fix the baseline so `docker compose up` gives a working API + admin + Nuxt site with seed data (a management command `seed_demo` that uses Faker but only as a dev dependency).
+
+## Phase 1: new features (Django core, real-estate marketplace)
+Keep the existing app boundaries; add or extend with tests for every state machine and money flow.
+1. **Listings lifecycle and moderation**: draft -> pending_review -> published -> reserved -> sold/rented -> expired/archived, audit trail, moderator queue in admin, duplicate-listing detection (address + geo + price + image hash), anti-fraud flags (price outliers, reused phone, stock photos).
+2. **Vietnam-specific listing data**: price in VND integers (and per m²), area (m²), legal status (sổ đỏ/sổ hồng, hợp đồng mua bán, giấy tờ khác), direction, frontage and alley width, floors, bedrooms, project/developer, planning (quy hoạch) status field, land-use type; address model using the **post-2025 administrative structure** (see Phase 2) with old-unit alias lookup.
+3. **Search**: PostGIS geo search (radius/polygon/map bbox), Postgres full-text + trigram with Vietnamese unaccent normalisation, faceted filters, saved searches and alerts (email/Zalo OA stub via a notification provider interface), favourites, SEO slugs and sitemap for Nuxt.
+4. **Agencies and agents**: onboarding with KYC documents, approval workflow, roles/permissions, team seats, performance stats.
+5. **Leads**: capture from site and API, routing rules (round robin / by area / by agent load), SLA timers and escalation, lead scoring (keep `serverless-aws/services/lead-scoring` contract and make a Python reference implementation + tests), viewing scheduling with calendar slots, activity timeline.
+6. **Valuations**: automated valuation model v1 per ward/district from ingested comparables plus official land price tables; confidence interval, explanation of drivers, history; reproducible tests with fixture data.
+7. **Billing**: listing packages/boosts, agency subscriptions, wallet with **double-entry ledger** (DB-enforced invariants), payment interface with **VNPay, MoMo, ZaloPay, VietQR/NAPAS** webhooks (signature verification, idempotency, replay protection) and Stripe for international; VAT and e-invoice export hooks per current Vietnamese rules (research and record).
+8. **Reliability defaults** (the user wants defensive systems): idempotency keys on payment/lead/listing-create endpoints, timeouts and retries with backoff+jitter only for safe calls, circuit breaker around external providers, background jobs (Celery or equivalent, record choice) with bounded retries and a **dead-letter queue** (table + admin replay/discard + metrics), transactional outbox for notifications, graceful shutdown, health/readiness endpoints, rate limiting.
+9. i18n **vi/en** throughout (Django + Nuxt), accessible UI basics, structured logging with request IDs, OpenAPI schema published and contract-tested.
+
+## Phase 2: data ingress from Vietnamese sources (latest 2026)
+Build a pluggable `ingest` pipeline: `Source` plugin -> fetch -> immutable raw landing (S3 or table; payload, hash, fetched_at) -> normalise (Pydantic) -> idempotent upsert -> data-quality checks -> metrics; scheduled runs recorded (`IngestRun`), retries with backoff then dead-letter, replay from raw landing, per-source rate limit/circuit breaker/conditional requests, robots.txt and terms respected.
+**Research with web search first, because the rules and sources changed in 2025-2026 (do not trust memory); record the findings, status as of today and your decisions in `specs/010-vn-sources.md`.** Cover at least:
+- **Administrative units**: the 2025 reform (provinces merged, district level removed, communes/wards re-formed): current official code list and the old->new mapping; loader + alias search.
+- **Land price tables (bảng giá đất)** under the Land Law 2024 for 2026 by province/city: official publication sources, how to ingest (PDF/Excel parsing with validation), versioning by effective date.
+- **Official statistics and market data**: State Bank of Vietnam rates (FX, policy/mortgage-related rates), GSO/Ministry of Construction real-estate market reports and the national real-estate market information system if it has public data, Vietnam Land Registry publications.
+- **Listing portals** (batdongsan.com.vn, Chotot/Nhà Tốt, Alonhadat, Mogi and similar): use **only official partner APIs, XML/CSV feeds, licensed data, or agent-supplied bulk uploads**. **Do not write scrapers that violate a site's terms/robots.txt, evade anti-bot measures, or use accounts you do not own.** Where no legitimate programmatic access exists, document it and ship a validated CSV/Excel/JSON/XML bulk-import path (template + dry-run validation + error report) that agencies use, plus an email-to-listing or webhook intake if feasible.
+- **Geocoding and maps**: choose a licensed or open option (OSM/Nominatim self-hosted or a commercial VN provider), cache results, handle Vietnamese address parsing.
+- **Payments/bank notifications**: VNPay/MoMo/ZaloPay/VietQR sandbox formats for reconciliation.
+Deliverables: working connectors with **recorded fixtures and contract tests** (no live credentials exist; label each connector "verified against docs/fixtures, not live"): administrative units, land price tables, SBV rates, one partner-feed/CSV portal-style listing import, geocoder; data-quality dashboard in admin; sample dataset loader; throughput test importing 100k synthetic listings with idempotency proven (run twice, same counts).
+
+## Phase 3: AWS-ready with Terraform (user: "ready in terraform, will deploy next session")
+**Never run `terraform apply` or `plan` against AWS, never create AWS resources, never use or request credentials.** Allowed: `terraform fmt`, `init -backend=false`, `validate`, and static scans (`tflint`, `checkov`, `trivy config`, via docker if not installed). Terraform replaces `serverless-aws/cdk` as the source of truth: port every CDK resource to Terraform, then delete the CDK app once parity is documented in `specs/020-infra-parity.md` (keep services' code).
+- `infra/terraform/` with modules and `envs/staging`, `envs/prod`; `infra/bootstrap/` for remote state (S3 + lock).
+- Network: VPC with public/private subnets, endpoints or NAT; ALB + ACM + Route53 (domain via variable, none hardcoded); WAF (managed rules + rate limit).
+- Compute: ECS Fargate for `django-core` (web), `worker`, `beat`; ECR; autoscaling; migrations as a one-off task definition; Nuxt site on S3+CloudFront (static/SSR decision recorded) or Fargate/Lambda; Lambda functions for `image-pipeline`, `lead-scoring`, `notifications` with SQS/SNS/EventBridge/S3 triggers, DLQs and redrive alarms.
+- Data: RDS PostgreSQL 16 with PostGIS extension handling (Multi-AZ in prod, encryption, backups, private), ElastiCache Redis, S3 buckets (media, raw ingest landing, with versioning, encryption, public access blocked, lifecycle), OpenSearch only if you decide you need it (record why).
+- Security/ops: Secrets Manager/SSM for secrets, least-privilege IAM per task/function, GitHub OIDC deploy role (no static keys), CloudWatch logs/alarms (5xx, latency, CPU, queue lag, **DLQ depth/age**), keep the Datadog dashboards/monitors optional behind a variable.
+- Docker: multi-stage non-root images with healthchecks for django-core and the Nuxt app.
+- `infra/README.md`: prerequisites, variable reference, exact first-deploy steps, rollback, destroy, rough monthly cost table (labelled **estimate**), and an explicit list of what is **unverified because nothing was applied**.
+- `make tf-check` (fmt, validate both envs, scans) and a CI job.
+
+## Working method and rules
+- Convention: every todo in `specs/TODO.md` first, behaviour in numbered `specs/NNN-*.md` indexed in `specs/README.md`, tick in the same change. Keep milestones small; run the tests yourself and read the output before claiming anything.
+- Commits small, on `main`, pushed after each milestone (the user authorised pushing to main on their repos). Author and committer `mashallow <35926768+TuanKietTran@users.noreply.github.com>` (set GIT_AUTHOR_*/GIT_COMMITTER_* and -c user.name/user.email), `-c commit.gpgsign=false`, **no Co-Authored-By/Claude/AI trailers, no CLAUDE.md**, never `.mjs`.
+- No real secrets in the repo; `.env.example` only. Max ~15 minutes stuck on one thing: log it in TODO.md, choose the simplest correct alternative, continue.
+
+## Timeline (2.5 hours)
+0:00-0:25 Phase 0. 0:25-1:10 Phase 1 items 1-5, 8. 1:10-1:45 Phase 1 items 6, 7, 9 and Phase 2 pipeline + administrative units + land prices. 1:45-2:05 remaining Phase 2 connectors, bulk import, data-quality page, throughput test. 2:05-2:30 Phase 3 Terraform + Docker + CI, all validated. Last 10 min: README, `specs/FINAL.md` (what exists, how verified, unverified items, known gaps), everything pushed.
