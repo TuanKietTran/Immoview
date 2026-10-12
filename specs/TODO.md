@@ -26,7 +26,7 @@
 
 ## Audit priority order
 - [x] Lead scoring Python reference and contract tests
-- [ ] Duplicate detection and anti-fraud scoring
+- [x] Duplicate detection and anti-fraud scoring
 - [ ] PostGIS geo and PostgreSQL FTS/trigram/unaccent search with real compose database tests
 - [ ] Celery bounded retries, circuit breaker, DLQ admin replay/discard/metrics
 

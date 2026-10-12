@@ -49,6 +49,10 @@ class ListingModel(models.Model):
     moderation_notes = models.TextField(blank=True)
     fraud_flags = models.JSONField(default=list, blank=True)
     duplicate_key = models.CharField(max_length=128, blank=True, db_index=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    image_hashes = models.JSONField(default=list, blank=True)
+    contact_phone = models.CharField(max_length=30, blank=True, db_index=True)
     view_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -111,6 +115,7 @@ class PhotoModel(models.Model):
     cdn_large = models.CharField(max_length=500, blank=True)
     order = models.PositiveSmallIntegerField(default=0)
     processed = models.BooleanField(default=False)
+    image_hash = models.CharField(max_length=128, blank=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

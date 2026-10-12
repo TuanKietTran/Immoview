@@ -12,6 +12,7 @@
 | [007-reliability-primitives](007-reliability-primitives.md) | Outbox, idempotency, and dead-letter records | implemented; tests passed |
 | [008-phase1-audit](008-phase1-audit.md) | Line-by-line Phase 1 gap audit | complete; gaps tracked |
 | [009-lead-scoring](009-lead-scoring.md) | Python reference for Lambda lead scoring contract | implemented; fixture tests passed |
+| [011-duplicate-fraud](011-duplicate-fraud.md) | Duplicate fingerprint and anti-fraud flags | implemented; unit tests passed |
 | [010-vn-sources](010-vn-sources.md) | Vietnam source research and lawful ingress status | decision recorded; live access unverified |
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
 | [FINAL](FINAL.md) | Final implemented/verified/unverified summary | planned |
