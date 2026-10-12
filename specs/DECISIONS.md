@@ -18,3 +18,4 @@
 2026-10-12 — Agency approval is a locked onboarding state machine; KYC stores immutable-provider metadata and checksum, not document bytes in the database.
 2026-10-12 — Route leads to the least-loaded candidate with deterministic UUID tie-breaking, set a bounded SLA deadline, and append an assignment activity in one transaction.
 2026-10-12 — Persist outbox, idempotency, and dead-letter records in Django first; idempotency hashes the canonical request and uses a savepoint to safely handle concurrent duplicate keys.
+2026-10-12 — The Phase 1 audit marks only tested foundations complete; all listed duplicate/fraud, geo/FTS, provider, Celery, circuit-breaker, metrics, and operational gaps remain open until verified.
