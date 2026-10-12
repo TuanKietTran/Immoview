@@ -13,3 +13,4 @@
 2026-10-12 — Keep nginx on development host port 8081 because an unrelated local process owns 8080; verified API/admin through nginx on 8081.
 2026-10-12 — Use the generated Nuxt Nitro server directly for local verification because this Nuxt preview wrapper mis-parses the host argument; the generated server returned HTTP 200.
 2026-10-12 — Enforce listing transitions in a row-locked application service and write an audit event in the same transaction; invalid transitions produce no audit record.
+2026-10-12 — Add Vietnamese fields as nullable migration-safe columns while legacy Swiss columns remain; VND amounts are integer đồng and per-m² values require a total VND price.
