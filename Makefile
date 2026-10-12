@@ -17,5 +17,7 @@ tf-check:
 	terraform -chdir=infra/terraform fmt -check -recursive
 	terraform -chdir=infra/terraform/envs/staging init -backend=false
 	terraform -chdir=infra/terraform/envs/staging validate
+	terraform -chdir=infra/terraform/envs/dev init -backend=false
+	terraform -chdir=infra/terraform/envs/dev validate
 	terraform -chdir=infra/terraform/envs/prod init -backend=false
 	terraform -chdir=infra/terraform/envs/prod validate

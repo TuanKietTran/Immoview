@@ -39,7 +39,7 @@ jobs:
       - run: uv sync --dev
       - run: uv run python manage.py migrate --noinput
       - run: uv run pytest -q
-      - run: uv run ruff check apps/listings/domain/vietnam.py apps/listings/domain/entities.py apps/listings/tests config/test_settings.py
+      - run: uv run ruff check apps/ingest apps/listings/domain/vietnam.py apps/listings/domain/entities.py apps/listings/tests config/test_settings.py
       - run: uv run mypy apps/listings/domain/vietnam.py apps/listings/domain/entities.py
 
   frontends:

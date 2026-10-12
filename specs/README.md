@@ -25,5 +25,6 @@
 | [020-infra-parity](020-infra-parity.md) | CDK-to-Terraform parity and unverified deployment items | scaffold; parity unverified |
 | [021-ingest-core](021-ingest-core.md) | Ingest raw landing, Pydantic normalize, upsert and DLQ core | implemented; tests passed |
 | [022-ingest-connectors](022-ingest-connectors.md) | Fixture-backed lawful VN connector primitives and contracts | implemented; fixtures only, not live |
-| [023-ingest-quality-benchmark](023-ingest-quality-benchmark.md) | Data-quality admin visibility, sample loader and 100k benchmark command | implemented; timing pending run completion |
+| [024-terraform-parity](024-terraform-parity.md) | Terraform modules/env roots, CDK removal and validation boundary | implemented; validate-only, provider init unverified |
+| [023-ingest-quality-benchmark](023-ingest-quality-benchmark.md) | Data-quality admin visibility, sample loader and 100k benchmark command | implemented; 100k run exceeded session SLA |
 | [FINAL](FINAL.md) | Final implemented/verified/unverified summary | checkpoint recorded; open gaps listed |
