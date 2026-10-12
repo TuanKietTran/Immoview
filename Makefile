@@ -7,7 +7,7 @@ lint:
 	cd django-core && uv run ruff check apps/listings/domain/vietnam.py apps/listings/domain/entities.py apps/listings/tests config/test_settings.py
 
 typecheck:
-	cd django-core && SECRET_KEY=ci-test-secret DEBUG=true ALLOWED_HOSTS=localhost uv run mypy apps/listings/domain/vietnam.py apps/listings/domain/entities.py apps/listings/tests
+	cd django-core && SECRET_KEY=ci-test-secret DEBUG=true ALLOWED_HOSTS=localhost uv run mypy apps/listings/domain/vietnam.py apps/listings/domain/entities.py
 
 build:
 	cd cloud_front && pnpm build

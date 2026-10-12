@@ -1,6 +1,7 @@
 import uuid
 
 import pytest
+from django.db import IntegrityError
 
 from apps.listings.api.filters import ListingFilter
 from apps.listings.infrastructure.models import ListingModel, SavedSearchModel
@@ -21,5 +22,5 @@ def test_vnd_facets_filter_listings() -> None:
 def test_saved_search_names_are_unique_per_user() -> None:
     user_id = uuid.uuid4()
     SavedSearchModel.objects.create(user_id=user_id, name="Da Nang", query={"province_code": "48"})
-    with pytest.raises(Exception):
+    with pytest.raises(IntegrityError):
         SavedSearchModel.objects.create(user_id=user_id, name="Da Nang", query={})
