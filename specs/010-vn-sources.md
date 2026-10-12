@@ -33,3 +33,18 @@ VNPay, MoMo, ZaloPay and VietQR/NAPAS connectors will be signature-verified agai
 ## Ingress contract
 
 `Source -> fetch (terms/robots/rate limit) -> RawLanding(payload, sha256, fetched_at) -> Pydantic normalize -> idempotent upsert -> quality checks/metrics -> IngestRun`. Retryable safe fetches use bounded exponential backoff with jitter; exhausted runs become dead letters and can be replayed from raw landing. No connector may silently discard a raw payload.
+
+## Research refresh (checkpoint 2026-10-12)
+
+Web searches were performed before recording this refresh. Search-engine results were noisy for Vietnamese queries, so only primary institutional domains are treated as source leads:
+
+- Government policy/legal publication: `https://xaydungchinhsach.chinhphu.vn/` and `https://vanban.chinhphu.vn/`; Resolution 202/2025/QH15 is the primary provincial reorganisation instrument. The reported result is 34 provincial-level units from the 2025 reform. The exact official code/mapping download is **not verified in this repository**.
+- General Statistics Office: `https://www.gso.gov.vn/`; candidate source for current administrative codes/statistics and metadata.
+- State Bank of Vietnam: `https://www.sbv.gov.vn/`; candidate source for reference FX/policy-rate publications.
+- Ministry of Construction: `https://moc.gov.vn/`; candidate source for real-estate market reports.
+
+The 2025 administrative reform removed the district level from the current operating hierarchy and re-formed commune-level units. The implementation therefore stores province/commune codes and historical aliases, but does not hard-code a complete mapping from search snippets. A signed official code-list fixture is required before marking the loader verified.
+
+Land-price research confirms the correct ingestion shape is a versioned provincial table under the Land Law 2024 framework: preserve publication bytes, legal instrument, province, effective date, unit, and parser warnings. No 2026 table was downloaded or validated here; status remains **unverified**.
+
+Portal research outcome is unchanged: no lawful public partner API/feed was confirmed by the search pass, so the product path remains agency bulk import and documented partner adapters only. No robots/terms-violating scraper was written.

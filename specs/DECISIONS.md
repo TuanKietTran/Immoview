@@ -27,3 +27,4 @@
 2026-10-12 — Valuation v1 averages commune comparables with an optional official rate, returns a reproducible ±15% interval and explanations, and never presents fixture estimates as live market truth.
 2026-10-12 — Ledger posting requires balanced positive debit/credit totals in one transaction; webhook verification is provider allow-listed and canonical-HMAC fixture based until provider-specific docs are encoded.
 2026-10-12 — Use Django LocaleMiddleware and a small typed Nuxt locale composable for the initial vi/en foundation; translation completeness is not claimed.
+2026-10-12 — Treat primary government domains as source leads and require an official code-list/table fixture before marking Vietnam administrative or land-price ingestion verified; noisy search results are not evidence.
