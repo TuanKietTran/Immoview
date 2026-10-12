@@ -5,7 +5,7 @@ from uuid import UUID
 from django.db import transaction
 from django.utils import timezone
 
-from .infrastructure.models import AgencyModel, AgencyStatus
+from .infrastructure.models import AgencyModel, AgencyStatus, KycDocument
 
 
 class InvalidAgencyTransition(ValueError):
@@ -23,10 +23,21 @@ def submit_for_approval(agency_id: UUID) -> AgencyModel:
 
 
 @transaction.atomic
+def verify_kyc_document(document_id: UUID) -> KycDocument:
+    document = KycDocument.objects.select_for_update().get(pk=document_id)
+    document.verified_at = timezone.now()
+    document.rejected_reason = ""
+    document.save(update_fields=["verified_at", "rejected_reason"])
+    return document
+
+
+@transaction.atomic
 def approve_agency(agency_id: UUID, approver_id: UUID) -> AgencyModel:
     agency = AgencyModel.objects.select_for_update().get(pk=agency_id)
     if agency.status != AgencyStatus.PENDING_APPROVAL:
         raise InvalidAgencyTransition("Only pending agencies can be approved")
+    if not agency.kyc_documents.filter(verified_at__isnull=False, rejected_reason="").exists():
+        raise InvalidAgencyTransition("Agency approval requires at least one verified KYC document")
     agency.status = AgencyStatus.APPROVED
     agency.is_active = True
     agency.approved_at = timezone.now()

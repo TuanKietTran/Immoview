@@ -9,6 +9,8 @@ from django.db import IntegrityError
 
 from apps.billing.infrastructure.models import PaymentWebhookEvent
 
+from .provider_signatures import sign_provider_payload
+
 SUPPORTED_PROVIDERS = frozenset({"vnpay", "momo", "zalopay", "vietqr", "stripe"})
 
 
@@ -19,7 +21,7 @@ def canonical_payload(payload: dict[str, Any]) -> bytes:
 def verify_signature(provider: str, payload: dict[str, Any], signature: str, secret: str) -> bool:
     if provider not in SUPPORTED_PROVIDERS:
         raise ValueError("unsupported payment provider")
-    expected = hmac.new(secret.encode(), canonical_payload(payload), hashlib.sha256).hexdigest()
+    expected = sign_provider_payload(provider, payload, secret)
     return hmac.compare_digest(expected, signature)
 
 

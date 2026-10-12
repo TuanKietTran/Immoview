@@ -3,14 +3,13 @@ from decimal import Decimal
 import pytest
 
 from apps.billing.domain.ledger import post_transaction
-from apps.billing.domain.webhooks import canonical_payload, claim_webhook
+from apps.billing.domain.provider_signatures import sign_provider_payload
+from apps.billing.domain.webhooks import claim_webhook
 
 
 def test_webhook_signature_and_replay_protection(db: None) -> None:
-    payload = {"amount": 100, "currency": "VND"}
-    import hmac
-    import hashlib
-    signature = hmac.new(b"secret", canonical_payload(payload), hashlib.sha256).hexdigest()
+    payload = {"vnp_Amount": "100000", "vnp_TxnRef": "event-1", "vnp_OrderInfo": "Thanh toan"}
+    signature = sign_provider_payload("vnpay", payload, "secret")
     assert claim_webhook("vnpay", "event-1", payload, signature, "secret") is True
     assert claim_webhook("vnpay", "event-1", payload, signature, "secret") is False
     with pytest.raises(ValueError):

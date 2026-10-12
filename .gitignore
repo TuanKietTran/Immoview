@@ -93,3 +93,9 @@ Thumbs.db
 *.sln
 
 # Temporary /
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfplan

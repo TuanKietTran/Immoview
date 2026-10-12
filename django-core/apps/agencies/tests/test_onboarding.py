@@ -6,6 +6,7 @@ from apps.agencies.application import (
     InvalidAgencyTransition,
     approve_agency,
     submit_for_approval,
+    verify_kyc_document,
 )
 from apps.agencies.infrastructure.models import AgencyModel, AgencyStatus, KycDocument
 
@@ -17,6 +18,8 @@ def agency(db: None) -> AgencyModel:
 
 @pytest.mark.django_db
 def test_agency_onboarding_requires_approval(agency: AgencyModel) -> None:
+    document = KycDocument.objects.create(agency=agency, document_type="business_license", storage_key="kyc/a.pdf", checksum="a" * 64)
+    verify_kyc_document(document.id)
     submit_for_approval(agency.id)
     approved = approve_agency(agency.id, uuid.uuid4())
     assert approved.status == AgencyStatus.APPROVED
@@ -25,6 +28,13 @@ def test_agency_onboarding_requires_approval(agency: AgencyModel) -> None:
 
 @pytest.mark.django_db
 def test_approval_cannot_skip_submission(agency: AgencyModel) -> None:
+    with pytest.raises(InvalidAgencyTransition):
+        approve_agency(agency.id, uuid.uuid4())
+
+
+@pytest.mark.django_db
+def test_approval_requires_verified_kyc(agency: AgencyModel) -> None:
+    submit_for_approval(agency.id)
     with pytest.raises(InvalidAgencyTransition):
         approve_agency(agency.id, uuid.uuid4())
 
