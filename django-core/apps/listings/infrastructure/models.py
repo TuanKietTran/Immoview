@@ -30,6 +30,9 @@ class ListingModel(models.Model):
         default=ListingStatus.DRAFT.value,
         db_index=True,
     )
+    moderation_notes = models.TextField(blank=True)
+    fraud_flags = models.JSONField(default=list, blank=True)
+    duplicate_key = models.CharField(max_length=128, blank=True, db_index=True)
     view_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -45,6 +48,22 @@ class ListingModel(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title} ({self.postcode} {self.city})"
+
+
+class ListingAuditEvent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    listing = models.ForeignKey(ListingModel, on_delete=models.CASCADE, related_name="audit_events")
+    from_status = models.CharField(max_length=20, blank=True)
+    to_status = models.CharField(max_length=20)
+    actor_id = models.UUIDField(null=True, blank=True)
+    reason = models.CharField(max_length=500, blank=True)
+    metadata = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "listing_audit_events"
+        ordering = ["created_at"]
+        indexes = [models.Index(fields=["listing", "created_at"])]
 
 
 class PhotoModel(models.Model):

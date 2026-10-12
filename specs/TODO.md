@@ -2,7 +2,8 @@
 
 ## Open (ordered)
 - [x] Phase 0: upgrade runtime/dependencies, PostGIS compose, secure settings, dev tooling, seed_demo, CI (verified tests/lint/typecheck, compose API/admin, Nuxt build/server)
-- [ ] Phase 1: listing lifecycle/moderation and Vietnam-specific fields (lifecycle state machine and VND invariant started; moderation/address fields open)
+- [x] Phase 1.1: listing lifecycle, audit trail, moderation and tests
+- [ ] Phase 1: listing lifecycle/moderation and Vietnam-specific fields (lifecycle, audit, moderation foundation complete; Vietnam fields open)
 - [ ] Phase 1: search, agencies, leads, valuations, billing and reliability primitives
 - [ ] Phase 2: pluggable ingress, administrative aliases, land-price/statistics connectors, lawful bulk import, fixtures and throughput test
 - [ ] Phase 3: Terraform modules/envs, Docker hardening, CI validation and parity document (validate-only scaffold passes; parity open)
