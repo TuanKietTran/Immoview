@@ -78,6 +78,12 @@ DATABASES = {
     }
 }
 
+CELERY_BROKER_URL = config("CELERY_BROKER_URL", default=config("REDIS_URL", default="redis://localhost:6379/0"))
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_TASK_ACKS_LATE = True
+CELERY_TASK_REJECT_ON_WORKER_LOST = True
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",

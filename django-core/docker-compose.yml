@@ -73,6 +73,48 @@ services:
     expose:
       - "8000"
 
+  worker:
+    build: .
+    command: uv run celery -A config.celery_app worker --loglevel=INFO --concurrency=2
+    volumes:
+      - .:/app
+    environment:
+      SECRET_KEY: dev-secret-key-change-in-prod
+      DEBUG: "True"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,web"
+      DB_HOST: db
+      DB_NAME: realestate
+      DB_USER: realestate
+      DB_PASSWORD: realestate
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  beat:
+    build: .
+    command: uv run celery -A config.celery_app beat --loglevel=INFO
+    volumes:
+      - .:/app
+    environment:
+      SECRET_KEY: dev-secret-key-change-in-prod
+      DEBUG: "True"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,web"
+      DB_HOST: db
+      DB_NAME: realestate
+      DB_USER: realestate
+      DB_PASSWORD: realestate
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   nginx:
     image: nginx:alpine
     ports:

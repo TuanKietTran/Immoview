@@ -3,7 +3,12 @@ import uuid
 import pytest
 
 from apps.shared.models import DeadLetterTask, OutboxEvent
-from apps.shared.reliability import claim_idempotency, dead_letter, enqueue_outbox, record_response
+from apps.shared.reliability import (
+    claim_idempotency,
+    dead_letter,
+    enqueue_outbox,
+    record_response,
+)
 
 
 @pytest.mark.django_db

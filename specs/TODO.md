@@ -28,7 +28,7 @@
 - [x] Lead scoring Python reference and contract tests
 - [x] Duplicate detection and anti-fraud scoring
 - [x] PostGIS geo and PostgreSQL FTS/trigram/unaccent search with real compose database tests
-- [ ] Celery bounded retries, circuit breaker, DLQ admin replay/discard/metrics
+- [x] Celery bounded retries, circuit breaker, DLQ admin replay/discard/metrics
 
 ## Blocked or unverified
 - [ ] Live Vietnamese portals and payment providers: no credentials/partner access; only docs/fixtures may be verified

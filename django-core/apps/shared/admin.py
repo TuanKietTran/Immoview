@@ -64,6 +64,15 @@ class DeadLetterTaskAdmin(admin.ModelAdmin):
     list_display = ["task_name", "status", "attempts", "created_at"]
     list_filter = ["status", "task_name"]
     readonly_fields = ["id", "created_at"]
+    actions = ["replay", "discard"]
+
+    @admin.action(description="Replay selected dead letters")
+    def replay(self, request, queryset):
+        queryset.update(status="replay_requested")
+
+    @admin.action(description="Discard selected dead letters")
+    def discard(self, request, queryset):
+        queryset.update(status="discarded")
 
 
 @admin.register(ApiKey)

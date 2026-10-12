@@ -8,6 +8,7 @@ from typing import Any
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
+from .metrics import increment
 from .models import DeadLetterTask, IdempotencyRecord, OutboxEvent
 
 
@@ -44,4 +45,6 @@ def enqueue_outbox(event_type: str, aggregate_type: str, aggregate_id: str, payl
 
 
 def dead_letter(task_name: str, payload: dict, error: Exception, attempts: int) -> DeadLetterTask:
-    return DeadLetterTask.objects.create(task_name=task_name, payload=payload, error=str(error), attempts=attempts)
+    record = DeadLetterTask.objects.create(task_name=task_name, payload=payload, error=str(error), attempts=attempts)
+    increment("immoview.dlq.created", tags=[f"task:{task_name}"])
+    return record
