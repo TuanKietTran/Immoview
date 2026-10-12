@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import unicodedata
-import xml.etree.ElementTree as ET  # noqa: S405 - DOCTYPE/ENTITY rejected before parsing
+import xml.etree.ElementTree as ET
 from datetime import date
 
 from .fixtures import AdministrativeCatalog, PartnerCsvImporter, Unit, load_land_prices
@@ -52,7 +52,7 @@ class PartnerXmlImporter:
         upper = content.upper()
         if "<!DOCTYPE" in upper or "<!ENTITY" in upper:
             raise ValueError("DOCTYPE/ENTITY declarations are not allowed")
-        root = ET.fromstring(content)  # noqa: S314
+        root = ET.fromstring(content)
         return [{child.tag: (child.text or "").strip() for child in node} for node in root.findall("listing")]
 
     def dry_run(self, content: str) -> dict:

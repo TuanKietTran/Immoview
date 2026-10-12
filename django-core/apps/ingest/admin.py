@@ -5,9 +5,13 @@ from .models import IngestDeadLetter, IngestRun, RawLanding
 
 @admin.register(IngestRun)
 class IngestRunAdmin(admin.ModelAdmin):
-    list_display = ("source", "status", "fetched_count", "imported_count", "error_count", "started_at")
+    list_display = ("source", "status", "fetched_count", "imported_count", "error_count", "success_rate", "started_at")
     list_filter = ("source", "status")
-    readonly_fields = [field.name for field in IngestRun._meta.fields]
+    readonly_fields = [field.name for field in IngestRun._meta.fields] + ["success_rate"]
+
+    @admin.display(description="Success rate")
+    def success_rate(self, obj):
+        return f"{obj.imported_count / obj.fetched_count:.1%}" if obj.fetched_count else "—"
 
 
 @admin.register(RawLanding)
